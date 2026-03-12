@@ -34,17 +34,10 @@ public class Task2 {
         Assert.assertEquals(ids.size(), categories.size());
         
         for (int i = 0; i < ids.size(); i++) {
-            Assert.assertNotNull(ids.get(i));
+        	Assert.assertTrue(ids.get(i) > 0);
             Assert.assertNotNull(titles.get(i));
             Assert.assertNotNull(categories.get(i));
             
-            Assert.assertTrue(ids.get(i) > 0);	
-            
-            System.out.println("Product " + (i+1) + ":");
-            System.out.println("id: " + ids.get(i));
-            System.out.println("title: " + titles.get(i));
-            System.out.println("category: " + categories.get(i));
-            System.out.println("____________________________________\n");
         }
         
     }

@@ -34,10 +34,6 @@ public class Task1 {
             Assert.assertTrue(userId > 0);
             Assert.assertNotNull(title);
 
-            System.out.println("userId: " + userId);
-            System.out.println("id: " + returnedId);
-            System.out.println("title: " + title);
-            System.out.println("____________________________________\n");
             
         }
     }
