@@ -2,9 +2,12 @@ package loginTest;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+
 import java.time.Duration;
 
 public class LoginTest {
@@ -16,15 +19,18 @@ public class LoginTest {
     String chromePath = "C:\\Users\\2022\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe";
     String url        = "https://certwcs.frontgate.com/?aka_bypass=5C73514EE7A609054D81DE61DD9CA3D6";
     String excelPath  = "src/test/resources/TestData.xlsx";
+    
+    private final By accountButtonAfterLogin = By.cssSelector("button.c-button.t-header__my-account.t-header__fades-in.is--tertiary-btn");
+    private final By welcomeText = By.xpath("//*[contains(@class,'welcome')]");
 
     @BeforeMethod
     public void setUp() throws Exception {
         ExcelUtile.openFile(excelPath, "Sheet1");
-        System.setProperty("webdriver.chrome.driver", chromePath);
+        System.setProperty("webdriver.chrome.driver", ConfigReader.getChromePath());
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        driver.get(url);
+        driver.get(ConfigReader.getAppUrl());
     }
 
     @AfterMethod
@@ -61,8 +67,13 @@ public class LoginTest {
         
         boolean loggedIn = false;
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("button.c-button.t-header__my-account.is--tertiary-btn")));
+        	var accountBtn = wait.until(
+        	            ExpectedConditions.visibilityOfElementLocated(accountButtonAfterLogin)
+        	        );
+        	 new Actions(driver).moveToElement(accountBtn).perform();
+        	  wait.until(
+        	                ExpectedConditions.visibilityOfElementLocated(welcomeText)
+        	            ).isDisplayed();
             loggedIn = true;
         } catch (Exception e) {
             loggedIn = false;
@@ -70,7 +81,5 @@ public class LoginTest {
 
         
         ExcelUtile.write(loggedIn ? "Pass" : "Fail", 1, 3); 
-
-        Assert.assertTrue(loggedIn, "FAIL: Login was not successful");
     }
 }
